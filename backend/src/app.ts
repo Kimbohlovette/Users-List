@@ -1,27 +1,40 @@
 import * as dotenv from 'dotenv';
-dotenv.config();
-
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import userRoutes from './routes/user/userRoutes';
 
-const PORT = process.env['PORT'] || 3030;
-const CLUSTER = process.env['CLUSTER'];
-const MONGODB_PWD = process.env['MONGODB_PWD'];
-const DB_NAME = process.env['MONGODB_NAME'];
+// collect db information from environment variables
+dotenv.config();
+const port = process.env.PORT || 5000;
+const dbUserName = process.env['MONGODB_NAME'];
+const mongodbPwd = process.env['MONGODB_PWD'];
+const mongodbAppName = process.env['MONGODB_APPNAME'];
+const mongodbDatabaseName = process.env['MONGODB_DBNAME'];
+
+// initialize express app
 const app = express();
 
-const PATH = `mongodb+srv://kimbohlovette:${MONGODB_PWD}@${CLUSTER}.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
-mongoose
-	.connect(PATH || '', {})
-	.then(() => {
-		app.listen(PORT, () => {
-			console.log(`Listening on port ${PORT}...`);
-		});
-	})
-	.catch((error) => {
-		console.log(error);
+// construct mongodb url
+// const MONGO_URI = `mongodb+srv://${dbUserName}:${mongodbPwd}@${mongodbAppName}.mongodb.net/${mongodbDatabaseName}?retryWrites=true&w=majority`;
+
+// connect to mongodb using mongoose
+// mongoose
+// 	.connect(MONGO_URI || '', {})
+// 	.then(() => {
+// 		app.listen(port, () => {
+// 			console.log(`Listening on port ${port}...`);
+// 		});
+// 	})
+// 	.catch((error) => {
+// 		console.log(error);
+// 	});
+
+mongoose.connect('mongodb://127.0.0.1:27017/test').then(() => {
+	app.listen(port, () => {
+		console.log(`Listening on port ${port}`);
 	});
+});
 app.use(
 	cors({
 		origin: '*',
@@ -30,4 +43,4 @@ app.use(
 app.use(express.static('./public'));
 app.use(express.json());
 
-app.use('/api/v1/sessions', userRoutes);
+app.use('/users', userRoutes);
