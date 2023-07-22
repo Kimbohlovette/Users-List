@@ -5,7 +5,7 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 
 function ShortUser() {
 	return (
-		<div className="relative card border border-slate-100 bg-white w-full rounded-md py-4 px-8 max-w-xl cursor-pointer hover:shadow">
+		<div className="relative card border border-slate-100 bg-white w-full rounded-md py-4 px-8 cursor-pointer hover:shadow">
 			{/* The delete and edit button <Floating top right> */}
 			<div className="absolute top-2 right-2 flex flex-row gap-4 items-center p-2 text-slate-500">
 				<button className="p-2 rounded-full hover:bg-orange-50 ">
