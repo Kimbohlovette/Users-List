@@ -2,8 +2,9 @@ import React from 'react';
 import { MdOutlineMail, MdOutlineModeEditOutline } from 'react-icons/md';
 import { BsTelephone } from 'react-icons/bs';
 import { RiDeleteBin6Line } from 'react-icons/ri';
+import { User } from '../types';
 
-function ShortUser() {
+function ShortUser({ user }: { user: User }) {
 	return (
 		<div className="relative card border border-slate-100 bg-white w-full rounded-md py-4 px-8 cursor-pointer hover:shadow">
 			{/* The delete and edit button <Floating top right> */}
@@ -25,21 +26,21 @@ function ShortUser() {
 				</div>
 				<div>
 					<h1 className="font-semibold text-slate-800">
-						Kimboh Lovette
+						{user.name}
 					</h1>
 					<span className="text-sm text-blue-300">
-						Software Engineer
+						{user.profession}
 					</span>
 				</div>
 			</div>
 			<div className="pt-5 flex flex-col gap-y-3 text-sm font-light">
 				<div className="text-slate-500 flex flex-row items-center gap-x-2">
 					<MdOutlineMail />
-					<p>kimbohlovette@gmail.com</p>
+					<p>{user.email}</p>
 				</div>
 				<div className="text-slate-500 flex flex-row items-center gap-x-2">
 					<BsTelephone />
-					<p>+237 654-11-59-22</p>
+					<p>{user.phoneNumber}</p>
 				</div>
 			</div>
 		</div>

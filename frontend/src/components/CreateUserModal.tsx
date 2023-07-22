@@ -1,12 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TfiClose } from 'react-icons/tfi';
-
-function CreateUserModal() {
+import { User } from '../types';
+function CreateUserModal({
+	show,
+	mode,
+	data,
+	setShow,
+}: {
+	show: boolean;
+	mode: 'create' | 'edit';
+	setShow: React.Dispatch<React.SetStateAction<boolean>>;
+	data?: User;
+}) {
 	return (
 		<div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center bg-slate-600/60 backdrop-blur-sm z-50">
 			<div className="relative p-16 bg-white shadow-xl rounded-md w-full max-w-xl">
 				{/* Close button */}
-				<button className="absolute top-5 right-5 p-2 hover:bg-blue-50 rounded-xl">
+				<button
+					onClick={() => {
+						setShow(false);
+					}}
+					className="absolute top-5 right-5 p-2 hover:bg-blue-50 rounded-xl"
+				>
 					<TfiClose />
 				</button>
 				<h1 className="mb-5 text-slate-600 text-2xl font-bold">
@@ -85,7 +100,13 @@ function CreateUserModal() {
 						</div>
 					</div>
 					<div className="flex flex-row justify-end">
-						<button className="w-full max-w-[50%] py-3 px-4 focus:outline-none border rounded-md min-w-0 focus:border-blue-400 hover:bg-blue-500 focus:ring-1 bg-blue-400 text-white text-semibold font-semibold">
+						<button
+							onClick={() => {
+								// add create functionality here
+								setShow(false);
+							}}
+							className="w-full max-w-[50%] py-3 px-4 focus:outline-none border rounded-md min-w-0 focus:border-blue-400 hover:bg-blue-500 focus:ring-1 bg-blue-400 text-white text-semibold font-semibold"
+						>
 							Create user
 						</button>
 					</div>
