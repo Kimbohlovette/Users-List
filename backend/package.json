@@ -1,0 +1,35 @@
+{
+	"name": "itimer-server",
+	"version": "1.0.0",
+	"description": "Backend api for fitness coach mobile app",
+	"main": "index.js",
+	"scripts": {
+		"dev": "npx nodemon",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "npm run build && node build/app.js",
+		"build": "rimraf ./build && tsc"
+	},
+	"engines": {
+		"node": ">=16.0.0"
+	},
+	"author": "Kimboh Lovette Bantar",
+	"license": "ISC",
+	"dependencies": {
+		"body-parser": "^1.20.2",
+		"cors": "^2.8.5",
+		"dotenv": "^16.0.3",
+		"express": "^4.18.2",
+		"mongodb": "^5.1.0",
+		"mongoose": "^7.0.3",
+		"morgan": "^1.10.0"
+	},
+	"devDependencies": {
+		"@types/cors": "^2.8.13",
+		"@types/express": "^4.17.17",
+		"@types/node": "^18.15.11",
+		"nodemon": "^2.0.22",
+		"rimraf": "^5.0.0",
+		"ts-node": "^10.9.1",
+		"typescript": "^5.0.3"
+	}
+}
