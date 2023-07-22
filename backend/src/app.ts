@@ -30,11 +30,14 @@ const app = express();
 // 		console.log(error);
 // 	});
 
-mongoose.connect('mongodb://127.0.0.1:27017/test').then(() => {
-	app.listen(port, () => {
-		console.log(`Listening on port ${port}`);
-	});
-});
+mongoose
+	.connect('mongodb://127.0.0.1:27017/users-list')
+	.then(() => {
+		app.listen(port, () => {
+			console.log(`Listening on port ${port}`);
+		});
+	})
+	.catch((error) => console.log('Error connecting to mongodb: ', error));
 app.use(
 	cors({
 		origin: '*',
