@@ -20,5 +20,17 @@ The application may break if the server has not yet started.
 ### Backend
 
 The backend server is built with Express.js and MongoDB database.
+1. Naviage to the backend directory `cd backend`
 
-Install mongodb, enter the terminal and create a database called `users-list`. [Follow this link to install and setup mongodb](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/)
+2. Install mongodb [Follow this link to install and setup mongodb](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/)
+
+3. After installing mongodb successfully, run `mongosh` on the terminal to enter the Mongodb terminal.
+4. Create a new database called `users-list` by running the following command on the mongodb terminal
+   ```
+   use users-list
+   ```
+5. Run `npm install` to install all package dependencies and start the server with `npm run dev`.
+
+
+
+
