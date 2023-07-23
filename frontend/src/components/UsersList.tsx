@@ -1,6 +1,5 @@
 import React from 'react';
 import ShortUser from './ShortUser';
-import { User } from '../types';
 import useSWR from 'swr';
 import { fetchAllUsers } from '../utils/fetchAPI';
 
