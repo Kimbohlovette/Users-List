@@ -1,5 +1,6 @@
 import { User } from '../types';
 
+const token = 'somefaketoken';
 export const fetchAllUsers = async (page?: number, limit?: number) => {
 	try {
 		const response = await fetch(
@@ -20,6 +21,7 @@ export const createUser = async (payload: User) => {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${token}`,
 			},
 			body: JSON.stringify(payload),
 		});
@@ -37,6 +39,7 @@ export const updateUser = async (userId: string, payload: any) => {
 		method: 'PATCH',
 		headers: {
 			'Content-Type': 'application/json',
+			'Authorization': `Bearer ${token}`,
 		},
 	});
 	return response;
@@ -48,4 +51,39 @@ export const deleteUser = async (userId: string) => {
 	});
 
 	return (await response.json()).deletedId;
+};
+
+export const signup = async (payload: {
+	username: string;
+	email: string;
+	password: string;
+}) => {
+	try {
+		const response = await fetch('http://localhost:5000/auth/signup', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(payload),
+		});
+
+		return response;
+	} catch (error) {
+		console.log(error);
+	}
+};
+export const signin = async (payload: { email: string; password: string }) => {
+	try {
+		const response = await fetch('http://localhost:5000/auth/signin', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(payload),
+		});
+
+		return response;
+	} catch (error) {
+		console.log(error);
+	}
 };

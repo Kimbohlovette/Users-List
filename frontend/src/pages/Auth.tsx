@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import Signup from '../components/Signup';
+import Signin from '../components/Signin';
+import { Outlet } from 'react-router-dom';
 
 function Auth() {
-	return <div>Auth</div>;
+	return <Outlet />;
 }
 
 export default Auth;
