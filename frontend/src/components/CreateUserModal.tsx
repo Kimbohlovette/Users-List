@@ -1,17 +1,72 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TfiClose } from 'react-icons/tfi';
 import { User } from '../types';
+import { useForm } from 'react-hook-form';
+import { createUser, updateUser } from '../utils/fetchAPI';
+import { error } from 'console';
 function CreateUserModal({
-	show,
 	mode,
-	data,
 	setShow,
+	data,
 }: {
-	show: boolean;
 	mode: 'create' | 'edit';
 	setShow: React.Dispatch<React.SetStateAction<boolean>>;
 	data?: User;
 }) {
+	const {
+		register,
+		formState: { errors },
+		handleSubmit,
+	} = useForm();
+
+	const [error, setError] = useState<string>('');
+	const [initialValues, setInitialValues] = useState<any>();
+
+	useEffect(() => {
+		if (mode === 'edit') {
+			if (data) {
+				setInitialValues(data);
+				console.log(data);
+			}
+		}
+	}, [mode]);
+
+	const onSubmit = async (formData: any) => {
+		// clear errors
+		setError('');
+
+		// check mode of entry into the modal
+		if (mode === 'edit' && data) {
+			const updateRes = await updateUser(data.id, formData);
+			if (!updateRes.ok) {
+				const resData = await updateRes.json();
+				console.log(resData.error);
+				setError(resData.message);
+				return;
+			}
+			console.log('All good!');
+			setShow(false);
+			return;
+		}
+
+		// Else create a new user
+		const res = await createUser(formData);
+		if (!res) {
+			setError(
+				`An error occured while ${
+					mode === 'edit' ? 'editing' : 'creating'
+				}.`
+			);
+		} else {
+			if (!res.ok) {
+				const resData = await res.json();
+				console.log(resData.error);
+				setError(resData.message);
+				return;
+			}
+		}
+	};
+
 	return (
 		<div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center bg-slate-600/60 backdrop-blur-sm z-50">
 			<div className="relative p-16 bg-white shadow-xl rounded-md w-full max-w-xl">
@@ -27,7 +82,10 @@ function CreateUserModal({
 				<h1 className="mb-5 text-slate-600 text-2xl font-bold">
 					Create new user
 				</h1>
-				<div className="flex flex-col gap-y-8">
+				<form
+					onSubmit={handleSubmit(onSubmit)}
+					className="flex flex-col gap-y-8"
+				>
 					<div>
 						<label
 							htmlFor="profession"
@@ -39,8 +97,14 @@ function CreateUserModal({
 							Full Name
 						</label>
 						<input
+							{...(register('name'), { minLength: 4 })}
+							defaultValue={
+								initialValues ? initialValues.name : ''
+							}
 							type="text"
-							name="userName"
+							name="name"
+							required
+							aria-invalid={errors.name ? true : false}
 							placeholder="John Doe"
 							className="py-3 px-4 focus:outline-none border rounded-md min-w-0 w-full focus:border-blue-400 focus:ring-1"
 						/>
@@ -57,8 +121,13 @@ function CreateUserModal({
 							Email
 						</label>
 						<input
+							{...register('email')}
 							type="email"
 							name="email"
+							defaultValue={
+								initialValues ? initialValues.email : ''
+							}
+							required
 							placeholder="john-doe@someone.com"
 							className="py-3 px-4 focus:outline-none border rounded-md min-w-0 w-full focus:border-blue-400 focus:ring-1"
 						/>
@@ -76,9 +145,16 @@ function CreateUserModal({
 								Phone number
 							</label>
 							<input
-								type="phone"
+								{...register('phoneNumber')}
+								type="tel"
 								name="phoneNumber"
-								placeholder="+237 654-11-59-22"
+								required
+								placeholder="+(237) 654-11-59-22"
+								defaultValue={
+									initialValues
+										? initialValues.phoneNumber
+										: ''
+								}
 								className="flex-1 py-3 px-4 focus:outline-none border rounded-md min-w-0 focus:border-blue-400 focus:ring-1"
 							/>
 						</div>
@@ -91,26 +167,31 @@ function CreateUserModal({
 								Profession
 							</label>
 							<input
+								{...register('profession')}
 								type="text"
 								id="profession"
 								name="profession"
+								defaultValue={
+									initialValues
+										? initialValues.profession
+										: ''
+								}
 								placeholder="Software Developer"
 								className="flex-1 py-3 px-4 focus:outline-none border rounded-md min-w-0 w-full focus:border-blue-400 focus:ring-1"
 							/>
 						</div>
 					</div>
+					{!!error && (
+						<span className="text-red-500 font-light text-sm py-2">
+							{error}
+						</span>
+					)}
 					<div className="flex flex-row justify-end">
-						<button
-							onClick={() => {
-								// add create functionality here
-								setShow(false);
-							}}
-							className="w-full max-w-[50%] py-3 px-4 focus:outline-none border rounded-md min-w-0 focus:border-blue-400 hover:bg-blue-500 focus:ring-1 bg-blue-400 text-white text-semibold font-semibold"
-						>
+						<button className="w-full max-w-[50%] py-3 px-4 focus:outline-none border rounded-md min-w-0 focus:border-blue-400 hover:bg-blue-500 focus:ring-1 bg-blue-400 text-white text-semibold font-semibold">
 							Create user
 						</button>
 					</div>
-				</div>
+				</form>
 			</div>
 		</div>
 	);
