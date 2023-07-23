@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import UsersList from './components/UsersList';
 import CreateUserModal from './components/CreateUserModal';
 import { BiPlus } from 'react-icons/bi';
@@ -7,13 +7,6 @@ import { fetchAllUsers } from './utils/fetchAPI';
 
 function App() {
 	const [showModal, setShowModal] = useState<boolean>(false);
-	const { data, isLoading, error } = useSWR(
-		'/api/v1/users/fetch',
-		() => {
-			return fetchAllUsers();
-		},
-		{ revalidateOnFocus: true }
-	);
 
 	const { mutate } = useSWRConfig();
 
@@ -49,11 +42,9 @@ function App() {
 							</button>
 						</div>
 					</header>
-					{isLoading ? (
-						<span>Loading</span>
-					) : (
-						<UsersList data={data} />
-					)}
+					<Suspense fallback={<span>Loading...</span>}>
+						<UsersList />
+					</Suspense>
 				</div>
 			</div>
 		</>
