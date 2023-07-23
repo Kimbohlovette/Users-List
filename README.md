@@ -18,3 +18,7 @@ On successful installation, execute `npm start` or `npm run start` to start the 
 The application may break if the server has not yet started. 
 
 ### Backend
+
+The backend server is built with Express.js and MongoDB database.
+
+Install mongodb, enter the terminal and create a database called `users-list`. [Follow this link to install and setup mongodb](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/)
