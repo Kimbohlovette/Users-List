@@ -13,7 +13,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 		const deleted = await User.findByIdAndDelete(id);
 		if (!deleted) {
 			res.status(404).json({
-				success: false,
+				error: 'USER_NOTFOUND',
 				message: 'resource not found',
 			});
 		} else {

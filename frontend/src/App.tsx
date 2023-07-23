@@ -2,20 +2,22 @@ import React, { useState } from 'react';
 import UsersList from './components/UsersList';
 import CreateUserModal from './components/CreateUserModal';
 import { BiPlus } from 'react-icons/bi';
+import useSWR from 'swr';
+import { fetchAllUsers } from './utils/fetchAPI';
 
 function App() {
-	function handleCreateUser() {
-		// implement add user
-	}
 	const [showModal, setShowModal] = useState<boolean>(false);
+	const { data, isLoading, error } = useSWR(
+		'/api/v1/users',
+		() => {
+			return fetchAllUsers();
+		},
+		{ revalidateOnFocus: true }
+	);
 	return (
 		<>
 			{showModal && (
-				<CreateUserModal
-					show={false}
-					setShow={setShowModal}
-					mode="create"
-				/>
+				<CreateUserModal setShow={setShowModal} mode="create" />
 			)}
 			<div className="bg-slate-100 flex justify-center items-center">
 				<div className="min-h-screen py-8 w-full max-w-2xl">
@@ -41,7 +43,11 @@ function App() {
 							</button>
 						</div>
 					</header>
-					<UsersList />
+					{isLoading ? (
+						<span>Loading</span>
+					) : (
+						<UsersList data={data} />
+					)}
 				</div>
 			</div>
 		</>
