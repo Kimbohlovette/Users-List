@@ -1,23 +1,45 @@
 import { useForm } from 'react-hook-form';
-import { NavLink } from 'react-router-dom';
+import { NavLink, redirect, useNavigate } from 'react-router-dom';
+import { signup } from '../utils/fetchAPI';
+import { TfiClose } from 'react-icons/tfi';
 
 export default function Signup() {
 	const { register, handleSubmit } = useForm();
+	const navigate = useNavigate();
 
-	const onSubmit = (data: any) => {
-		console.log(data);
+	const onSubmit = async (data: any) => {
+		const res = await signup(data);
+		if (!res) {
+			//handle error
+		} else {
+			if (!res.ok) {
+				const resData = await res.json();
+				console.log(resData.error);
+				return;
+			}
+			console.log('created!');
+			localStorage.setItem('@token', (await res.json()).token);
+		}
 	};
 
 	return (
 		<div>
 			<div className="w-full h-screen flex items-center justify-center bg-slate-300/60 z-50">
-				<div className="relative p-16 bg-white shadow-xl rounded-md w-full max-w-xl">
+				<div className="relative px-8 sm:p-x-16 py-12 bg-white shadow-xl rounded-md w-full max-w-xl">
+					<button
+						onClick={() => {
+							navigate('/');
+						}}
+						className="absolute top-5 right-5 p-2 hover:bg-blue-50 rounded-xl"
+					>
+						<TfiClose />
+					</button>
 					<h1 className="text-slate-700 text-xl font-bold mb-5">
 						Sign up for an account
 					</h1>
 					<form
 						onSubmit={handleSubmit(onSubmit)}
-						className="flex flex-col gap-y-8"
+						className="flex flex-col gap-y-5"
 					>
 						<div>
 							<label
@@ -69,7 +91,7 @@ export default function Signup() {
 								Password
 							</label>
 							<input
-								{...register('phoneNumber')}
+								{...register('password')}
 								type="password"
 								name="password"
 								required

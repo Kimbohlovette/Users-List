@@ -66,7 +66,6 @@ function CreateUserModal({
 	return (
 		<div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center bg-slate-600/60 backdrop-blur-sm z-50">
 			<div className="relative p-16 bg-white shadow-xl rounded-md w-full max-w-xl">
-				{/* Close button */}
 				<button
 					onClick={() => {
 						setShow(false);

@@ -1,8 +1,10 @@
 import { useForm } from 'react-hook-form';
-import { NavLink } from 'react-router-dom';
+import { TfiClose } from 'react-icons/tfi';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 export default function Signin() {
 	const { register, handleSubmit } = useForm();
+	const navigate = useNavigate();
 
 	const onSubmit = (data: any) => {
 		console.log(data);
@@ -12,6 +14,14 @@ export default function Signin() {
 		<div>
 			<div className="w-full h-screen flex items-center justify-center bg-slate-300/60 z-50">
 				<div className="relative p-16 bg-white shadow-xl rounded-md w-full max-w-xl">
+					<button
+						onClick={() => {
+							navigate('/');
+						}}
+						className="absolute top-5 right-5 p-2 hover:bg-blue-50 rounded-xl"
+					>
+						<TfiClose />
+					</button>
 					<h1 className="text-slate-700 text-xl font-bold mb-5">
 						Sign in to your account{' '}
 					</h1>

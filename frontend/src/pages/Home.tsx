@@ -3,6 +3,7 @@ import { BiPlus } from 'react-icons/bi';
 import { useSWRConfig } from 'swr';
 import CreateUserModal from '../components/CreateUserModal';
 import UsersList from '../components/UsersList';
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
 	const [showModal, setShowModal] = useState<boolean>(false);
@@ -12,6 +13,8 @@ function Home() {
 	useEffect(() => {
 		mutate('/api/v1/users/fetch');
 	}, [showModal]);
+
+	const navigate = useNavigate();
 	return (
 		<>
 			{showModal && (
@@ -31,15 +34,22 @@ function Home() {
 								</button>
 							</div>
 							<button
+								onClick={() => navigate('/auth/signin')}
+								className="py-1.5 px-4 rounded-md border hover:bg-blue-300 text-sm text-slate-600"
+							>
+								Login
+							</button>
+							<button
 								onClick={() => {
 									setShowModal(true);
 								}}
-								className="text-slate-600 flex flex-row items-center font-medium gap-x-2 bg-blue-50 hover:bg-blue-100 text-sm py-2 px-4 rounded-md"
+								className="text-slate-600 flex flex-row items-center font-medium gap-x-2 bg-blue-100 text-sm py-2 px-4 rounded-md"
 							>
 								<BiPlus />
 								Add User
 							</button>
 						</div>
+						<div className="flex justify-start mt-5"></div>
 					</header>
 					<Suspense fallback={<span>Loading...</span>}>
 						<UsersList />
