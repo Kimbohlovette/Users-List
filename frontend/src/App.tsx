@@ -1,19 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import UsersList from './components/UsersList';
 import CreateUserModal from './components/CreateUserModal';
 import { BiPlus } from 'react-icons/bi';
-import useSWR from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
 import { fetchAllUsers } from './utils/fetchAPI';
 
 function App() {
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const { data, isLoading, error } = useSWR(
-		'/api/v1/users',
+		'/api/v1/users/fetch',
 		() => {
 			return fetchAllUsers();
 		},
 		{ revalidateOnFocus: true }
 	);
+
+	const { mutate } = useSWRConfig();
+
+	useEffect(() => {
+		mutate('/api/v1/users/fetch');
+	}, [showModal]);
 	return (
 		<>
 			{showModal && (

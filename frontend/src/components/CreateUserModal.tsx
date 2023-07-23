@@ -3,7 +3,6 @@ import { TfiClose } from 'react-icons/tfi';
 import { User } from '../types';
 import { useForm } from 'react-hook-form';
 import { createUser, updateUser } from '../utils/fetchAPI';
-import { error } from 'console';
 function CreateUserModal({
 	mode,
 	setShow,
@@ -13,29 +12,24 @@ function CreateUserModal({
 	setShow: React.Dispatch<React.SetStateAction<boolean>>;
 	data?: User;
 }) {
-	const {
-		register,
-		formState: { errors },
-		handleSubmit,
-	} = useForm();
-
 	const [error, setError] = useState<string>('');
-	const [initialValues, setInitialValues] = useState<any>();
-
 	useEffect(() => {
 		if (mode === 'edit') {
 			if (data) {
-				setInitialValues(data);
-				console.log(data);
+				reset(data);
 			}
 		}
-	}, [mode]);
+	}, []);
+
+	const { register, handleSubmit, reset } = useForm({
+		defaultValues: data,
+	});
 
 	const onSubmit = async (formData: any) => {
 		// clear errors
 		setError('');
 
-		// check mode of entry into the modal
+		// Check if mode is 'edit'
 		if (mode === 'edit' && data) {
 			const updateRes = await updateUser(data.id, formData);
 			if (!updateRes.ok) {
@@ -64,6 +58,8 @@ function CreateUserModal({
 				setError(resData.message);
 				return;
 			}
+			console.log('created!');
+			setShow(false);
 		}
 	};
 
@@ -88,7 +84,7 @@ function CreateUserModal({
 				>
 					<div>
 						<label
-							htmlFor="profession"
+							htmlFor="name"
 							className="relative block text-slate-600 max-w-fit"
 						>
 							<span className="absolute -top-1 -right-4 text-red-500">
@@ -97,14 +93,10 @@ function CreateUserModal({
 							Full Name
 						</label>
 						<input
-							{...(register('name'), { minLength: 4 })}
-							defaultValue={
-								initialValues ? initialValues.name : ''
-							}
+							{...register('name')}
 							type="text"
 							name="name"
 							required
-							aria-invalid={errors.name ? true : false}
 							placeholder="John Doe"
 							className="py-3 px-4 focus:outline-none border rounded-md min-w-0 w-full focus:border-blue-400 focus:ring-1"
 						/>
@@ -124,9 +116,6 @@ function CreateUserModal({
 							{...register('email')}
 							type="email"
 							name="email"
-							defaultValue={
-								initialValues ? initialValues.email : ''
-							}
 							required
 							placeholder="john-doe@someone.com"
 							className="py-3 px-4 focus:outline-none border rounded-md min-w-0 w-full focus:border-blue-400 focus:ring-1"
@@ -150,11 +139,6 @@ function CreateUserModal({
 								name="phoneNumber"
 								required
 								placeholder="+(237) 654-11-59-22"
-								defaultValue={
-									initialValues
-										? initialValues.phoneNumber
-										: ''
-								}
 								className="flex-1 py-3 px-4 focus:outline-none border rounded-md min-w-0 focus:border-blue-400 focus:ring-1"
 							/>
 						</div>
@@ -171,11 +155,6 @@ function CreateUserModal({
 								type="text"
 								id="profession"
 								name="profession"
-								defaultValue={
-									initialValues
-										? initialValues.profession
-										: ''
-								}
 								placeholder="Software Developer"
 								className="flex-1 py-3 px-4 focus:outline-none border rounded-md min-w-0 w-full focus:border-blue-400 focus:ring-1"
 							/>
