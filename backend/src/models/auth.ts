@@ -9,6 +9,10 @@ const AuthSchema = new mongoose.Schema({
 		type: String,
 		required: [true, 'password field is required'],
 	},
+	username: {
+		type: String,
+		required: [true, 'username field is required'],
+	},
 });
 
 export const AuthModel = mongoose.model('AuthModel', AuthSchema);
