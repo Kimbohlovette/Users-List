@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { AuthModel } from '../../models/auth';
+import { generateWebToken } from '../../utils/generateWebToken';
 import * as dotenv from 'dotenv';
 dotenv.config();
 const secret = process.env['JWT_SECRET'] || '';
@@ -9,10 +10,10 @@ export const signup = async (req: Request, res: Response) => {
 	const password = req.body.password;
 	const username = req.body.username;
 
-	if (!email || !password || username) {
+	if (!email || !password || !username) {
 		return res.status(401).json({
 			error: 'INVALID_REQUEST_BODY',
-			message: 'incorect email, username or password combination',
+			message: 'incorect email, username, or password missing',
 		});
 	}
 	try {
@@ -25,7 +26,7 @@ export const signup = async (req: Request, res: Response) => {
 			});
 		}
 		//check against duplicate emails
-		const duplicateEmails = await AuthModel.find({ email: username });
+		const duplicateEmails = await AuthModel.find({ email: email });
 		if (duplicateEmails.length > 0) {
 			return res.status(401).json({
 				error: 'EMAIL_ALEADY_EXISTS',
@@ -35,6 +36,7 @@ export const signup = async (req: Request, res: Response) => {
 
 		// don't forget to hash password before saving
 		const authUser = await AuthModel.create({ username, email, password });
+		console.log('auth user', authUser);
 		// Hash password and compare
 		const payload = {
 			username: username,
@@ -48,7 +50,7 @@ export const signup = async (req: Request, res: Response) => {
 	} catch (error) {
 		return res.status(500).json({
 			error: 'SERVER_ERROR',
-			message: 'signup fail. Try again later',
+			message: 'signup fail. Try again later: ' + error,
 		});
 	}
 };

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { AuthModel } from '../../models/auth';
+import { generateWebToken } from '../../utils/generateWebToken';
 import * as dotenv from 'dotenv';
 dotenv.config();
 const secret = process.env['JWT_SECRET'] || '';
