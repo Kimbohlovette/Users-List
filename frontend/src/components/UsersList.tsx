@@ -1,12 +1,21 @@
 import React from 'react';
 import ShortUser from './ShortUser';
 import { User } from '../types';
+import useSWR from 'swr';
+import { fetchAllUsers } from '../utils/fetchAPI';
 
-function UsersList({ data }: { data: any[] }) {
+function UsersList() {
+	const { data } = useSWR(
+		'/api/v1/users/fetch',
+		() => {
+			return fetchAllUsers();
+		},
+		{ revalidateOnFocus: true, suspense: true }
+	);
 	return (
 		<div>
 			<div className="flex flex-col gap-y-2">
-				{data.map((item, key) => (
+				{data.map((item: any, key: any) => (
 					<ShortUser key={key} user={item} />
 				))}
 			</div>
