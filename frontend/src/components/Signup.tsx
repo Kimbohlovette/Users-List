@@ -2,19 +2,21 @@ import { useForm } from 'react-hook-form';
 import { NavLink, redirect, useNavigate } from 'react-router-dom';
 import { signup } from '../utils/fetchAPI';
 import { TfiClose } from 'react-icons/tfi';
+import { useState } from 'react';
 
 export default function Signup() {
 	const { register, handleSubmit } = useForm();
 	const navigate = useNavigate();
+	const [error, setError] = useState<string>('');
 
 	const onSubmit = async (data: any) => {
 		const res = await signup(data);
 		if (!res) {
-			//handle error
+			setError('Oops! Something went wrong. Try again later.');
 		} else {
 			if (!res.ok) {
-				const resData = await res.json();
-				console.log(resData.error);
+				const error = await res.json();
+				setError(error.message);
 				return;
 			}
 			console.log('created!');
@@ -34,9 +36,20 @@ export default function Signup() {
 					>
 						<TfiClose />
 					</button>
-					<h1 className="text-slate-700 text-xl font-bold mb-5">
+					<h1 className="text-slate-700 text-xl font-bold mb-2">
 						Sign up for an account
 					</h1>
+
+					<p
+						className={
+							!!error
+								? 'text-sm font-light text-red-500 my-2 text-center'
+								: 'invisible my-2'
+						}
+					>
+						{error}
+					</p>
+
 					<form
 						onSubmit={handleSubmit(onSubmit)}
 						className="flex flex-col gap-y-5"

@@ -13,7 +13,7 @@ export const signup = async (req: Request, res: Response) => {
 	if (!email || !password || !username) {
 		return res.status(401).json({
 			error: 'INVALID_REQUEST_BODY',
-			message: 'incorect email, username, or password missing',
+			message: 'Incorrect email, username, or password missing.',
 		});
 	}
 	try {
@@ -22,7 +22,7 @@ export const signup = async (req: Request, res: Response) => {
 		if (duplicateUserName.length > 0) {
 			return res.status(401).json({
 				error: 'USER_NAME_ALEADY_EXISTS',
-				message: 'username name already exists',
+				message: 'Username name already exists.',
 			});
 		}
 		//check against duplicate emails
@@ -30,13 +30,12 @@ export const signup = async (req: Request, res: Response) => {
 		if (duplicateEmails.length > 0) {
 			return res.status(401).json({
 				error: 'EMAIL_ALEADY_EXISTS',
-				message: 'email already exists',
+				message: 'Email already exists.',
 			});
 		}
 
 		// don't forget to hash password before saving
 		const authUser = await AuthModel.create({ username, email, password });
-		console.log('auth user', authUser);
 		// Hash password and compare
 		const payload = {
 			username: username,
@@ -50,7 +49,7 @@ export const signup = async (req: Request, res: Response) => {
 	} catch (error) {
 		return res.status(500).json({
 			error: 'SERVER_ERROR',
-			message: 'signup fail. Try again later: ' + error,
+			message: 'Signup failed. This is probably a server error.',
 		});
 	}
 };
