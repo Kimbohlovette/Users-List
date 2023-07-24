@@ -19,7 +19,7 @@ function ConfirmDeleteModal({
 		});
 	};
 	return (
-		<div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center bg-slate-500/80 z-[100]">
+		<div className="fixed top-0 left-0 w-full h-screen flex items-center justify-center bg-black/10 z-[100]">
 			<div className="border max-2xl rounded-md shadow bg-white p-8">
 				<p className="text-slate-600 mb-5">
 					Do you want to perminently delete <strong>{name}</strong>?
