@@ -170,7 +170,7 @@ function CreateUserModal({
 					)}
 					<div className="flex flex-row justify-end">
 						<button className="w-full max-w-[50%] py-3 px-4 focus:outline-none border rounded-md min-w-0 focus:border-blue-400 hover:bg-blue-500 focus:ring-1 bg-blue-400 text-white text-semibold font-semibold">
-							Create user
+							{mode === 'create' ? 'Create User' : 'Update User'}
 						</button>
 					</div>
 				</form>
