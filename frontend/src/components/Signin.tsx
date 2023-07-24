@@ -1,13 +1,27 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { TfiClose } from 'react-icons/tfi';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { signin } from '../utils/fetchAPI';
 
 export default function Signin() {
 	const { register, handleSubmit } = useForm();
 	const navigate = useNavigate();
+	const [error, setError] = useState<string>('');
 
-	const onSubmit = (data: any) => {
-		console.log(data);
+	const onSubmit = async (data: any) => {
+		const res = await signin(data);
+		if (!res) {
+			setError('Oops! Something went wrong. Try again later.');
+		} else {
+			if (!res.ok) {
+				const error = await res.json();
+				setError(error.message);
+				return;
+			}
+			console.log('created!');
+			localStorage.setItem('@token', (await res.json()).token);
+		}
 	};
 
 	return (
@@ -25,6 +39,15 @@ export default function Signin() {
 					<h1 className="text-slate-700 text-xl font-bold mb-5">
 						Sign in to your account{' '}
 					</h1>
+					<p
+						className={
+							!!error
+								? 'text-sm font-light text-red-500 my-2 text-center'
+								: 'invisible my-2'
+						}
+					>
+						{error}
+					</p>
 					<form
 						onSubmit={handleSubmit(onSubmit)}
 						className="flex flex-col gap-y-8"
