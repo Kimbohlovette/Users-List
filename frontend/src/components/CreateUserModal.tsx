@@ -3,6 +3,7 @@ import { TfiClose } from 'react-icons/tfi';
 import { User } from '../types';
 import { useForm } from 'react-hook-form';
 import { createUser, updateUser } from '../utils/fetchAPI';
+import { useSWRConfig } from 'swr';
 function CreateUserModal({
 	mode,
 	setShow,
@@ -13,6 +14,8 @@ function CreateUserModal({
 	data?: User;
 }) {
 	const [error, setError] = useState<string>('');
+	const { mutate } = useSWRConfig();
+
 	useEffect(() => {
 		if (mode === 'edit') {
 			if (data) {
@@ -38,7 +41,7 @@ function CreateUserModal({
 				setError(resData.message);
 				return;
 			}
-			console.log('All good!');
+			mutate('/api/v1/users/fetch');
 			setShow(false);
 			return;
 		}
@@ -59,6 +62,7 @@ function CreateUserModal({
 				return;
 			}
 			console.log('created!');
+
 			setShow(false);
 		}
 	};
