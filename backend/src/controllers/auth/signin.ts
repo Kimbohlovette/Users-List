@@ -12,7 +12,7 @@ export const signin = async (req: Request, res: Response) => {
 	if (!email || !password) {
 		return res.status(401).json({
 			error: 'INVALID_EMAIL_PASSWORD_COMBINATION',
-			message: 'incorect email or password combination',
+			message: 'Incorect email or password combination',
 		});
 	}
 	try {
@@ -20,14 +20,14 @@ export const signin = async (req: Request, res: Response) => {
 		if (!dbAuthInfo) {
 			return res.status(401).json({
 				error: 'INVALID_EMAIL_PASSWORD_COMBINATION',
-				message: 'incorect email or password combination',
+				message: 'Incorect email or password combination',
 			});
 		}
 		// Hash password and compare
 		if (dbAuthInfo.password !== password) {
 			return res.status(400).json({
 				error: 'INVALID_EMAIL_PASSWORD_COMBINATION',
-				message: 'incorect email or password combination',
+				message: 'Incorect email or password combination',
 			});
 		}
 		const payload = {
@@ -41,7 +41,7 @@ export const signin = async (req: Request, res: Response) => {
 	} catch (error) {
 		return res.status(500).json({
 			error: 'SERVER_ERROR',
-			message: 'could not authenticate user. Try again later',
+			message: 'Could not authenticate user. Try again later',
 		});
 	}
 };
