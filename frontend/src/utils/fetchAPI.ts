@@ -1,6 +1,5 @@
 import { User } from '../types';
 
-const token = 'somefaketoken';
 export const fetchAllUsers = async (page?: number, limit?: number) => {
 	try {
 		const response = await fetch(
@@ -16,6 +15,7 @@ export const fetchAllUsers = async (page?: number, limit?: number) => {
 };
 
 export const createUser = async (payload: User) => {
+	const token = localStorage.getItem('@token') || '';
 	try {
 		const response = await fetch('http://localhost:5000/users', {
 			method: 'POST',
@@ -34,6 +34,7 @@ export const createUser = async (payload: User) => {
 };
 
 export const updateUser = async (userId: string, payload: any) => {
+	const token = localStorage.getItem('@token') || '';
 	const response = await fetch(`http://localhost:5000/users/${userId}`, {
 		body: JSON.stringify(payload),
 		method: 'PATCH',
@@ -46,8 +47,12 @@ export const updateUser = async (userId: string, payload: any) => {
 };
 
 export const deleteUser = async (userId: string) => {
+	const token = localStorage.getItem('@token') || '';
 	const response = await fetch(`http://localhost:5000/users/${userId}`, {
 		method: 'DELETE',
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
 	});
 
 	return (await response.json()).deletedId;

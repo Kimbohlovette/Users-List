@@ -3,11 +3,14 @@ import { useForm } from 'react-hook-form';
 import { TfiClose } from 'react-icons/tfi';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { signin } from '../utils/fetchAPI';
+import { useAppDispatch } from '../store/hooks';
+import { updateAuthStatus } from '../store/slices/userSlice';
 
 export default function Signin() {
 	const { register, handleSubmit } = useForm();
 	const navigate = useNavigate();
 	const [error, setError] = useState<string>('');
+	const dispatch = useAppDispatch();
 
 	const onSubmit = async (data: any) => {
 		const res = await signin(data);
@@ -19,8 +22,9 @@ export default function Signin() {
 				setError(error.message);
 				return;
 			}
-			console.log('created!');
 			localStorage.setItem('@token', (await res.json()).token);
+			dispatch(updateAuthStatus(true));
+			navigate('/');
 		}
 	};
 
@@ -83,7 +87,7 @@ export default function Signin() {
 								Password
 							</label>
 							<input
-								{...register('phoneNumber')}
+								{...register('password')}
 								type="password"
 								name="password"
 								required

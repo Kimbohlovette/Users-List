@@ -1,13 +1,16 @@
 import { useForm } from 'react-hook-form';
-import { NavLink, redirect, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { signup } from '../utils/fetchAPI';
 import { TfiClose } from 'react-icons/tfi';
 import { useState } from 'react';
+import { useAppDispatch } from '../store/hooks';
+import { updateAuthStatus } from '../store/slices/userSlice';
 
 export default function Signup() {
 	const { register, handleSubmit } = useForm();
 	const navigate = useNavigate();
 	const [error, setError] = useState<string>('');
+	const dispatch = useAppDispatch();
 
 	const onSubmit = async (data: any) => {
 		const res = await signup(data);
@@ -19,8 +22,9 @@ export default function Signup() {
 				setError(error.message);
 				return;
 			}
-			console.log('created!');
 			localStorage.setItem('@token', (await res.json()).token);
+			dispatch(updateAuthStatus(false));
+			navigate('/');
 		}
 	};
 

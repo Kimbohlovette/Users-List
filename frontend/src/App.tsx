@@ -4,6 +4,8 @@ import Home from './pages/Home';
 import Auth from './pages/Auth';
 import Signin from './components/Signin';
 import Signup from './components/Signup';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
 const routes = createBrowserRouter([
 	{
 		path: '/',
@@ -26,7 +28,11 @@ const routes = createBrowserRouter([
 ]);
 
 function App() {
-	return <RouterProvider router={routes} />;
+	return (
+		<Provider store={store}>
+			<RouterProvider router={routes} />
+		</Provider>
+	);
 }
 
 export default App;

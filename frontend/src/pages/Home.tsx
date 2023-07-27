@@ -4,15 +4,20 @@ import { useSWRConfig } from 'swr';
 import CreateUserModal from '../components/CreateUserModal';
 import UsersList from '../components/UsersList';
 import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../store/hooks';
+import { logout } from '../utils/logout';
 
 function Home() {
 	const [showModal, setShowModal] = useState<boolean>(false);
+	const isAuthenticated = useAppSelector(
+		(state) => state.user.isAuthenticated
+	);
 
 	const { mutate } = useSWRConfig();
 
 	useEffect(() => {
 		mutate('/api/v1/users/fetch');
-	}, [showModal]);
+	}, [showModal, mutate]);
 
 	const navigate = useNavigate();
 	return (
@@ -34,10 +39,16 @@ function Home() {
 								</button>
 							</div>
 							<button
-								onClick={() => navigate('/auth/signin')}
+								onClick={() => {
+									if (isAuthenticated) {
+										logout();
+										return;
+									}
+									navigate('/auth/signin');
+								}}
 								className="py-1.5 px-4 rounded-md border hover:bg-blue-300 text-sm text-slate-600"
 							>
-								Login
+								{isAuthenticated ? 'Logout' : 'Login'}
 							</button>
 							<button
 								onClick={() => {
